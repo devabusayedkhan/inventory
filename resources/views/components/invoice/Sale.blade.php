@@ -297,7 +297,39 @@
 
     const invoiceSet = async () => {
 
-        const customer_id = document.getElementById('billToId');
+        let customer_id = document.getElementById('billToId');
+
+
+        if (!customer_id.value) {
+            showLoader();
+            let res = await axios.get('/api/findguestcustomer');
+
+            if (!res.data.id) {
+                // Add a guest Customer
+                await axios.post('/api/addcustomer', {
+                    name: "Guest Customer",
+                    email: "guestcustomer@gmail.com",
+                    mobile: "01666666666"
+                });
+                res = await axios.get('/api/findguestcustomer');
+            }
+
+            hideLoader();
+            await Swal.fire({
+                title: "Are you sure?",
+                text: "কোন কাস্টমার সিলেক্ট করা হয়নি। আপনি কি Guest Customer-এর কাছে পণ্য বিক্রি করতে চান?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    customer_id.value = res.data.id;
+                }
+            });
+        }
+
 
         showLoader();
         const res = await axios.post('/api/invoicecreate', {
@@ -342,7 +374,7 @@
         } else {
             Swal.fire({
                 icon: "error",
-                title: "Please add a customer and at least one product to proceed."
+                title: "At least one product is required. Please add one."
             });
         }
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserContorller extends Controller
 {
-    function loginRegisterLoad(Request $request)
+    public function loginRegisterLoad(Request $request)
     {
         $token = $request->cookie('token');
         $userEmail = JWTToken::VerifyToken($token);
@@ -26,13 +26,14 @@ class UserContorller extends Controller
     }
 
     // register from api
-    function register(Request $request)
+    public function register(Request $request)
     {
         try {
-            User::create($request->input());
+            $res = User::create($request->input());
             return response()->json([
                 'status' => 'Success',
-                'message' => 'Registration success'
+                'message' => 'Registration success',
+                'id' => $res->id
             ]);
         } catch (Error $e) {
             return "User not created";
@@ -40,7 +41,7 @@ class UserContorller extends Controller
     }
 
     // User login
-    function login(Request $request)
+    public function login(Request $request)
     {
         $userCount = User::where($request->input())->select('id')->first();
         if ($userCount !== null) {
@@ -65,7 +66,7 @@ class UserContorller extends Controller
 
 
     // Send forget password OTP
-    function SendOTPCode(Request $request)
+    public function SendOTPCode(Request $request)
     {
         $email = $request->input('email');
         $otp = rand(1000, 9999);
@@ -93,7 +94,7 @@ class UserContorller extends Controller
 
 
 
-    function VerifyOTP(Request $request)
+    public function VerifyOTP(Request $request)
     {
 
         $email = $request->input('email');
@@ -128,7 +129,7 @@ class UserContorller extends Controller
         }
     }
 
-    function UpdatePassword(Request $request)
+    public function UpdatePassword(Request $request)
     {
         $email = $request->header('email');
         $password = $request->input('password');
@@ -140,12 +141,12 @@ class UserContorller extends Controller
     }
 
     // profile
-    function Profile(Request $request)
+    public function Profile(Request $request)
     {
         return view("pages.profile.Profile");
     }
 
-    function GetUserData(Request $request)
+    public function GetUserData(Request $request)
     {
         $email = $request->header("email");
         $user = User::where("email", "=", $email)->first();
@@ -158,7 +159,7 @@ class UserContorller extends Controller
     }
 
     // update user data
-    function UpdateUserData(Request $request)
+    public function UpdateUserData(Request $request)
     {
         try {
             $email = $request->header("email");

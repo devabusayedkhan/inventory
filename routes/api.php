@@ -57,6 +57,9 @@ Route::post('/deletecustomer', [CustomerController::class,'DeleteCustomer'])
 // search customer
 Route::post('/findcustomer', [CustomerController::class,'FindCustomer'])
 ->middleware([VerifyUserLogin::class]);
+// search Guest customer
+Route::get('/findguestcustomer', [CustomerController::class,'FindGuestCustomer'])
+->middleware([VerifyUserLogin::class]);
 // End Customer --------------------------------
 
 //  product -----------------------------------

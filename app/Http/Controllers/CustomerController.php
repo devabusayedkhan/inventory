@@ -98,4 +98,15 @@ class CustomerController extends Controller
             return "Customer not found";
         }
     }
+    // Search customer
+    public function FindGuestCustomer(Request $request){
+        $userId = $request->header("id");
+        try {
+            return Customer::where("email", "guestcustomer@gmail.com")
+            ->where("user_id", $userId)
+            ->first();
+        } catch (\Throwable $th) {
+            return "Customer not found";
+        }
+    }
 }

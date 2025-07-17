@@ -55,6 +55,7 @@
       });
     } else {
       try {
+        showLoader();
         const response = await axios.post('/api/register', {
           first_name: firstName,
           last_name: lastName,
@@ -62,6 +63,7 @@
           mobile: mobile,
           password: password,
         });
+        hideLoader();
         Swal.fire({
           position: "center-center",
           icon: "success",
@@ -78,6 +80,7 @@
           icon: "warning",
           title: "This email already registered",
         });
+        hideLoader();
       }
     }
   }
