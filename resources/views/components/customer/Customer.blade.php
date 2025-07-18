@@ -50,7 +50,7 @@
         tableData.DataTable().destroy();
         tableList.empty();
 
-        res.data.forEach((item, index) => {
+        res.data.reverse().forEach((item, index) => {
 
             let row = `
                         <tr>

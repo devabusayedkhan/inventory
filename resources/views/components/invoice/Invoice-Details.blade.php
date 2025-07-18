@@ -16,8 +16,9 @@
                     <p class="text-gray-700">Mobile: <span class="font-bold" id="invoiceCustomerMobile"></span></p>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl font-bold text-indigo-900">dask<span class="text-orange-500">Z</span>one
-                    </span>
+                    {{-- <span class="text-2xl font-bold text-indigo-900">dask<span class="text-orange-500">Z</span>one
+                    </span> --}}
+                    <p id="invoiceLogo"></p>
                     <p class="text-gray-600 font-semibold mt-1">Invoice</p>
                     <p class="text-gray-500 text-sm">Date: <span id="invoiceDate"></span></p>
                 </div>
@@ -44,17 +45,21 @@
                     <b class="text-2xl font-bold"> ৳</b>
                     <span class="text-md" id="invoice-details-total"></span>
                 </p>
-                <p class="m-0"><strong class="text-md">PAYABLE: </strong>
-                    <b class="text-2xl font-bold"> ৳</b>
-                    <span class="text-md" id="invoice-details-payable"></span>
-                </p>
+                
                 <p class="m-0"><strong class="text-md">VAT(5%): </strong>
-                    <b class="text-2xl font-bold"> ৳</b>
+                    <b>(+)</b>
+                    <strong class="text-2xl font-bold"> ৳</strong>
                     <span class="text-md" id="invoice-details-vat"></span>
                 </p>
                 <p class="m-0"><strong class="text-md">Discount: </strong>
-                    <b class="text-2xl font-bold"> ৳</b>
+                    <b>(-)</b>
+                    <strong class="text-2xl font-bold"> ৳</strong>
                     <span class="text-md" id="invoice-details-discount"></span>
+                </p>
+
+                <p class="m-0"><strong class="text-md">PAYABLE: </strong>
+                    <b class="text-2xl font-bold"> ৳</b>
+                    <span class="text-md" id="invoice-details-payable"></span>
                 </p>
             </div>
 
@@ -70,7 +75,8 @@
             </button>
 
             <!-- Update Button -->
-            <button onclick="invoicePrintPage()" class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 font-bold">
+            <button onclick="invoicePrintPage()"
+                class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 font-bold">
                 Print
             </button>
         </div>
@@ -84,7 +90,12 @@
 
         showLoader();
         const res = await axios.post('/api/invoicedetails', { invoice_id, customer_id });
+        const getUser = await axios.get('/api/getuserdata');
         hideLoader();
+
+        if (getUser.data.data.profilePhoto) {
+            document.getElementById('invoiceLogo').innerHTML = `<img src="${getUser.data.data.profilePhoto}" class="max-w-[100px] max-h-[100px] inline"/>`
+        }
 
         if (res.status == 200) {
             let allInvoiceData = ``;
@@ -113,7 +124,7 @@
         document.getElementById('viewInvoiceModal').style.display = 'flex';
     }
 
-    const invoicePrintPage = ()=>{
+    const invoicePrintPage = () => {
         let invoicePrintContent = document.getElementById('invoicePrint').innerHTML;
         let orginalContents = document.body.innerHTML;
         document.body.innerHTML = invoicePrintContent;

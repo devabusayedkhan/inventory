@@ -1,5 +1,5 @@
 <script>
-    const createInputChange = ()=>{
+    const createInputChange = () => {
         document.getElementById('customerCreateErrorms').innerHTML = "";
     }
 </script>
@@ -42,7 +42,8 @@
             </button>
 
             <!-- Save Button -->
-            <button onclick="createCustomer()" type="button" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+            <button onclick="createCustomer()" type="button"
+                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
                 Save
             </button>
         </div>
@@ -54,45 +55,51 @@
         let customerName = document.getElementById('customerName');
         let customerEmail = document.getElementById('customerEmail');
         let customerMobile = document.getElementById('customerMobile');
+        if (!customerName.value) {
+            document.getElementById('customerCreateErrorms').innerHTML = "Customer Name is required";
+        } else if (!customerMobile.value) {
+            document.getElementById('customerCreateErrorms').innerHTML = "Customer Mobile numver is required";
+        } else {
 
-        showLoader();
-        const getCustomerData = await axios.get('/api/getcustomer');
-        hideLoader();
-
-        let customerNameChecker = "";
-        getCustomerData.data.map((item) => {
-            if (item.email.toLowerCase() == customerEmail.value.toLowerCase() || item.mobile.toLowerCase() == customerMobile.value.toLowerCase()) {
-                customerNameChecker = true;
-            }
-        });
-
-        if (customerNameChecker !== true) {
             showLoader();
-            const res = await axios.post('/api/addcustomer', {
-                name: customerName.value,
-                email: customerEmail.value,
-                mobile: customerMobile.value
-            });
+            const getCustomerData = await axios.get('/api/getcustomer');
             hideLoader();
 
-            if (res.data.status === "success") {
-                Swal.fire({
-                    position: "center-center",
-                    icon: "success",
-                    title: "Customer created success",
-                    showConfirmButton: false,
-                    timer: 1500
+            let customerNameChecker = "";
+            getCustomerData.data.map((item) => {
+                if (item.email.toLowerCase() == customerEmail.value.toLowerCase() || item.mobile.toLowerCase() == customerMobile.value.toLowerCase()) {
+                    customerNameChecker = true;
+                }
+            });
+
+            if (customerNameChecker !== true) {
+                showLoader();
+                const res = await axios.post('/api/addcustomer', {
+                    name: customerName.value,
+                    email: customerEmail.value,
+                    mobile: customerMobile.value
                 });
-                customerName.value = "";
-                customerEmail.value = "";
-                customerMobile.value = "";
-                document.getElementById('customerModal').style.display = 'none';
-                getcustomer();
+                hideLoader();
+
+                if (res.data.status === "success") {
+                    Swal.fire({
+                        position: "center-center",
+                        icon: "success",
+                        title: "Customer created success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    customerName.value = "";
+                    customerEmail.value = "";
+                    customerMobile.value = "";
+                    document.getElementById('customerModal').style.display = 'none';
+                    getcustomer();
+                } else {
+                    document.getElementById('customerCreateErrorms').innerHTML = res.data;
+                }
             } else {
-                document.getElementById('customerCreateErrorms').innerHTML = res.data;
+                document.getElementById('customerCreateErrorms').innerHTML = "This customer already exists.";
             }
-        }else{
-            document.getElementById('customerCreateErrorms').innerHTML = "This customer already exists.";
         }
     }
 </script>

@@ -50,8 +50,9 @@
                     <input type="hidden" value="" id="billToId">
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl font-bold text-indigo-900">dask<span class="text-orange-500">Z</span>one
-                    </span>
+                    <p id="billToLogo"></p>
+                    {{-- <span class="text-2xl font-bold text-indigo-900">dask<span class="text-orange-500">Z</span>one
+                    </span> --}}
                     <p class="font-bold text-xl text-emerald-600">Invoice</p>
                     <p class="text-cyan-600 font-bold">Date: <span>{{date('d-F-Y')}}</span></p>
                 </div>
@@ -75,20 +76,26 @@
                 <p class="font-bold">TOTAL:
                     <strong class="d-inline">৳</strong> <span id="totalAmount">0.00</span>
                 </p>
+
+                <p class="font-bold">VAT(0%):
+                    <strong class="d-inline">(+)৳</strong> <span id="vat">0.00</span>
+                </p>
+                <p class="font-bold">Discount:
+                    <strong class="d-inline">(-)৳ </strong> <span id="discount">0.00</span>
+                </p>
+
                 <p class="font-bold text-lg text-cyan-600">PAYABLE:
                     <strong class="d-inline">৳</strong> <span id="payable">0.00</span>
                 </p>
-                <p class="font-bold">VAT(5%):
-                    <strong class="d-inline">৳</strong> <span id="vat">0.00</span>
-                </p>
-                <p class="font-bold">Discount:
-                    <strong class="d-inline">৳</strong> <span id="discount">0.00</span>
-                </p>
 
-                <label class="block text-gray-600 mt-4 mb-0">Discount(%):</label>
-                <b class="block text-red-700 m-0" id="maxiumDiscountmsg"></b>
-                <input type="number" value="0" min="0" max="100" id="discountInput"
-                    class="w-20 px-2 py-1 border rounded" onkeyup="total()" />
+                <div class="discount">
+                    <div class="parsent">
+                        <label class="block text-gray-600 mt-4 mb-0">Discount(%):</label>
+                        <b class="block text-red-700 m-0" id="maxiumDiscountmsg"></b>
+                        <input type="number" value="0" min="0" max="100" id="discountInput"
+                            class="w-20 px-2 py-1 border rounded" onkeyup="total()" />
+                    </div>
+                </div>
             </div>
 
             <button onclick="invoiceSet()"
@@ -106,7 +113,12 @@
     const getCustomer = async () => {
         showLoader();
         const res = await axios.get('/api/getcustomer');
+        const getUser = await axios.get('/api/getuserdata');
         hideLoader();
+
+        if (getUser.data.data.profilePhoto) {
+            document.getElementById('billToLogo').innerHTML = `<img src="${getUser.data.data.profilePhoto}" class="max-w-[100px] max-h-[100px] inline"/>`
+        }
 
         const tableData = $("#saleCustomerTableData");
         const table = $("#saleCustomerTable");
@@ -127,7 +139,7 @@
         });
 
         table.DataTable({
-            order: [[0, 'asc']],
+            order: [[0, 'desc']],
             scrollCollapse: false,
             info: false,
             lengthChange: false
@@ -256,7 +268,7 @@
     const total = () => {
         const discountInput = document.getElementById('discountInput').value;
         // set vat
-        const setVat = 5; //This value is in %
+        const setVat = 0; //This value is in %
 
         let totalAmount = 0.00;
         let discount = 0;
@@ -271,11 +283,10 @@
         // discount
         if (discountInput > 0 && discountInput <= 50) {
             discount = (totalAmount * discountInput) / 100;
-            totalAmount -= discount;
         }
 
         vat = (totalAmount * setVat) / 100;
-        payable = totalAmount + vat;
+        payable = (totalAmount - discount) + vat;
 
         // show all amount
         document.getElementById('totalAmount').innerHTML = totalAmount.toFixed(2);
@@ -383,10 +394,8 @@
 
 
     (async () => {
-        showLoader();
         await getProduct();
         await getCustomer()
-        hideLoader();
     })()
 
 
