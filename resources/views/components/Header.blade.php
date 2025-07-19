@@ -12,7 +12,7 @@
 </script>
 
 
-<div class="loader hidden" id="loader">
+<div class="loader hidden absolute top-0 left-0 w-[100%]" id="loader">
   <div class="MuiLinearProgress-root " role="progressbar">
     <div class="MuiLinearProgress-bar MuiLinearProgress-bar1Indeterminate"></div>
     <div class="MuiLinearProgress-bar MuiLinearProgress-bar2Indeterminate"></div>
@@ -23,7 +23,7 @@
 <!-- Navbar -->
 <nav class="flex items-center justify-between bg-white px-6 py-3 shadow">
 
-  <a href="/" class="flex items-center gap-3" id="headerLogo">
+  <a href="/" class="flex items-center gap-3 h-[80px]" id="headerLogo">
     {{-- <span class="text-2xl font-bold text-indigo-900">dask<span class="text-orange-500">Z</span>one --}}
     </span>
   </a>
@@ -50,7 +50,7 @@
     if (login) {
       // logo
       if (response.data.data.profilePhoto) {
-        document.getElementById('headerLogo').innerHTML = `<img src="${response.data.data.profilePhoto}" class="max-w-[200px] max-h-[100px]"/>`
+        document.getElementById('headerLogo').innerHTML = `<img src="${response.data.data.profilePhoto}" class="max-w-[200px] max-h-[80px]"/>`
       }
       
       rightHeader.innerHTML = `

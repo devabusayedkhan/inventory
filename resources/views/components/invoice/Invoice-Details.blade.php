@@ -41,23 +41,23 @@
             </div>
             <!-- Totals -->
             <div class="mt-6 text-gray-800 text-sm space-y-1">
-                <p class="m-0"><strong class="text-md">TOTAL: </strong>
+                <p class="m-0 text-end"><strong class="text-md">TOTAL: </strong>
                     <b class="text-2xl font-bold"> ৳</b>
                     <span class="text-md" id="invoice-details-total"></span>
                 </p>
                 
-                <p class="m-0"><strong class="text-md">VAT(5%): </strong>
+                <p class="m-0 text-end"><strong class="text-md">VAT(5%): </strong>
                     <b>(+)</b>
                     <strong class="text-2xl font-bold"> ৳</strong>
                     <span class="text-md" id="invoice-details-vat"></span>
                 </p>
-                <p class="m-0"><strong class="text-md">Discount: </strong>
+                <p class="m-0 text-end mb-2"><strong class="text-md">Discount: </strong>
                     <b>(-)</b>
                     <strong class="text-2xl font-bold"> ৳</strong>
                     <span class="text-md" id="invoice-details-discount"></span>
                 </p>
-
-                <p class="m-0"><strong class="text-md">PAYABLE: </strong>
+<hr>
+                <p class="m-0 text-end font-bold text-lg text-red-600"><strong class="text-md">PAYABLE: </strong>
                     <b class="text-2xl font-bold"> ৳</b>
                     <span class="text-md" id="invoice-details-payable"></span>
                 </p>

@@ -21,9 +21,10 @@
             <table class="min-w-full divide-y divide-gray-200 mt-4" id="productTable">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">No</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">id</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Product img</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Product Name</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">barcode</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">unit</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Price</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Action</th>
@@ -53,26 +54,44 @@
         tableList.empty();
 
         res.data.reverse().forEach((item, index) => {
-            
+            let barcodeId = `barcode-${item.id}`;
             let row = `
                         <tr>
-                            <td class="px-4 py-2 text-sm text-gray-700 font-bold">${index + 1}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700 font-bold">${item.id}</td>
                             <td class="px-4 py-2 text-sm text-gray-700 font-bold">
-                            <img class="w-[50px] h-[50px] object-cover rounded" src="${item.img}"  onerror="this.src='productimg/photo_icon.png'"  alt="">
+                            <img class="w-[80px] h-[80px] object-cover rounded" src="${item.img}"  onerror="this.src='productimg/photo_icon.png'"  alt="">
                             </td>
                             <td class="px-4 py-2 text-sm text-gray-700 font-bold">${item['name']}</td>
+
+                            <td onclick="barcodePrint(${item.id})" id="${item.id}" class="px-4 py-2 text-sm text-gray-700 font-bold">
+                                <svg id="${barcodeId}" class="barcode"></svg>
+                            </td>
+
                             <td class="px-4 py-2 text-sm text-gray-700 font-bold">${item['unit']}</td>
                             <td class="px-4 py-2 text-sm text-yellow-600 font-bold"><b class="me-1">৳</b>${item['price']}</td>
-                            <td class="px-4 py-2 flex gap-2">
+                            <td class="px-4 py-2 gap-2">
                                 
-                            <button onclick="openProductUpdateModal(${item.id})" 
-                            class="product-update-btn px-3 py-1 rounded border border-green-500 text-green-500 hover:bg-green-500 hover:text-white text-sm"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <div class="flex gap-2">
+                                    <button onclick="openProductUpdateModal(${item.id})" 
+                                    class="product-update-btn px-3 py-1 rounded border border-green-500 text-green-500 hover:bg-green-500 hover:text-white text-sm"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                            <button onclick="deleteProduct(${item.id},'${item.img}')" class="px-3 py-1 rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                    <button onclick="deleteProduct(${item.id},'${item.img}')" class="px-3 py-1 rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+
                             </td>
                         </tr>`
 
             tableList.append(row);
+            // barcode generator
+            setTimeout(() => {
+                JsBarcode(`#${barcodeId}`, "942405" + item.id.toString(), {
+                    format: "CODE128",
+                    width: 2,
+                    height: 40,
+                    displayValue: true
+                });
+            }, 10);
+
         });
 
 
@@ -114,6 +133,15 @@
         }
     };
 
-
     getproduct()
+
+
+
+    const barcodePrint = (barcodeId) => {
+        let svgElement = document.getElementById(barcodeId).innerHTML;
+        let orginalContents = document.body.innerHTML;
+        document.body.innerHTML = svgElement;
+        window.print();
+        document.body.innerHTML = orginalContents;
+    }
 </script>

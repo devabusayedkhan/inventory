@@ -12,9 +12,10 @@
             <table class="w-full text-sm" id="saleProductTable">
                 <thead class="text-gray-500 border-b">
                     <tr>
+                        <th class="text-left w-[1%] hidden">id</th>
                         <th class="text-left w-[70%]">Product</th>
                         <th class="text-left w-[20%]">Price</th>
-                        <th class="text-left w-[10%]">Pick</th>
+                        <th class="text-left w-[9%]">Pick</th>
                     </tr>
                 </thead>
                 <tbody id="saleProductTableData">
@@ -73,22 +74,22 @@
             </table>
 
             <div class="text-sm text-gray-700 space-y-2">
-                <p class="font-bold">TOTAL:
+                <p class="font-bold text-end">TOTAL:
                     <strong class="d-inline">৳</strong> <span id="totalAmount">0.00</span>
                 </p>
 
-                <p class="font-bold">VAT(0%):
+                <p class="font-bold text-end">VAT(0%):
                     <strong class="d-inline">(+)৳</strong> <span id="vat">0.00</span>
                 </p>
-                <p class="font-bold">Discount:
+                <p class="font-bold text-end">Discount:
                     <strong class="d-inline">(-)৳ </strong> <span id="discount">0.00</span>
                 </p>
-
-                <p class="font-bold text-lg text-cyan-600">PAYABLE:
+<hr>
+                <p class="font-bold text-lg text-red-600 text-end">PAYABLE:
                     <strong class="d-inline">৳</strong> <span id="payable">0.00</span>
                 </p>
 
-                <div class="discount">
+                <div class="discount text-end">
                     <div class="parsent">
                         <label class="block text-gray-600 mt-4 mb-0">Discount(%):</label>
                         <b class="block text-red-700 m-0" id="maxiumDiscountmsg"></b>
@@ -174,6 +175,9 @@
 
             let row = `
                     <tr class="border-b">
+                        
+                        <td class="py-2 hidden">942405${item.id}</td>
+
                         <td class="py-2"><img src="${item.img}" class="w-[30px] h-[30px] object-cover inline"> ${item.name}</td>
                         <td class="py-2 me-1">
                             <strong class="d-inline text-2xl">৳</strong> ${item.price}

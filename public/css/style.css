@@ -154,3 +154,15 @@
 .profilePhoto:hover i{
     opacity: 1 !important;
 }
+
+
+@media print {
+  @page {
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
